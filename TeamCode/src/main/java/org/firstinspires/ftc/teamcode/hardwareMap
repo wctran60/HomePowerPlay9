@@ -1,0 +1,109 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.teamcode.auton.ChiefCardinalTeleOp;
+//import org.firstinspires.ftc.teamcode.drive.util.Encoder;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+
+
+    public class hardwareMap {
+
+        private LinearOpMode myOpMode = null;
+
+        //Hardware
+        public DcMotor RFMotor = null;
+        public DcMotor LFMotor = null;
+        public DcMotor RBMotor = null;
+        public DcMotor LBMotor = null;
+//        public DcMotor SliderMotor = null;
+
+        public Servo ClawServo = null;
+
+        IMU imu;
+
+//////    BNO055IMU imu;
+
+    //Additional Variables
+    //HardwareMap hardwareMap = null;
+    //public ElapsedTime runtime = new ElapsedTime();
+
+    //public hardwareMap(ChiefCardinalTeleOp hwMap){
+    //}
+
+    public hardwareMap (LinearOpMode opmode) {myOpMode = opmode;}
+
+
+
+    public void init() {
+        //initialize(HardwareMap
+        // hwMap)}{
+        //hardwareMap = hwMap;
+
+        imu = myOpMode.hardwareMap.get(IMU.class, "imu");
+
+        //ImuOrientationOnRobot RevHubOrientationOnRobot = null;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection  usbDirection  = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
+
+
+        //Connect Motors
+        RFMotor = myOpMode.hardwareMap.get(DcMotor.class,"RFMotor");
+        LFMotor = myOpMode.hardwareMap.get(DcMotor.class,"LFMotor");
+        RBMotor = myOpMode.hardwareMap.get(DcMotor.class,"RBMotor");
+        LBMotor = myOpMode.hardwareMap.get(DcMotor.class,"LBMotor");
+//        SliderMotor = myOpMode.hardwareMap.get(DcMotor.class, "SliderMotor");
+        Servo ClawServo = myOpMode.hardwareMap.servo.get("ClawServo");
+
+        //Set Up Motor Direction
+        RFMotor.setDirection(DcMotor.Direction.REVERSE);
+        RBMotor.setDirection(DcMotor.Direction.REVERSE);
+        LFMotor.setDirection(DcMotor.Direction.FORWARD);
+        LBMotor.setDirection(DcMotor.Direction.FORWARD);
+
+//        SliderMotor.setDirection(DcMotor.Direction.REVERSE);
+        ClawServo.setDirection(Servo.Direction.REVERSE);
+
+        LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //Set Motor Mode
+        RFMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LFMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RBMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LBMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        //Reset Encoders
+        //LFMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        SliderMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        //Set Zero Power Behavior
+        RFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LFMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        RBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LBMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        setMotorPower(0,0,0,0);
+        }
+
+        public void setMotorPower(double RF, double LF, double RB, double LB){
+            RFMotor.setPower(RF);
+            LFMotor.setPower(LF);
+            RBMotor.setPower(RB);
+            LBMotor.setPower(LB);
+    }
+}
+
